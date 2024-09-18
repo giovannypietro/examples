@@ -54,27 +54,13 @@ func GetUser(userID int) (*User, error) {
 	return &user, nil
 }
 
-func CreateEmailHeader(api orchestrator.Orchestrator, _ http.ResponseWriter, _ *http.Request) (http.Header, error) {
+func CreateHeader(api orchestrator.Orchestrator, _ http.ResponseWriter, _ *http.Request) (http.Header, error) {
 
 	logger := api.Logger()
 
-	logger.Info("Service Extension", "Building email custom header from remote API.")
+	logger.Debug("Service Extension", "Building email custom header from remote API.")
 
-	session, err := api.Session()
-
-	if err != nil {
-		return nil, fmt.Errorf("unable to retrieve session: %w", err)
-	}
-
-	// Replace with any attribute available via the Orchestrator session.
-
-	id, err := session.GetInt("azure.id")
-
-	if err != nil {
-		return nil, fmt.Errorf("unable to retrieve the attribute 'azure.id from the orchestrator': %w", err)
-	}
-
-	user, err := GetUser(id)
+	user, err := GetUser(2)
 
 	if err != nil {
 		return nil, fmt.Errorf("unable to fetch the user from the remote API: %w", err)
